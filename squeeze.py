@@ -15,7 +15,7 @@ mdsystem = mdtools.LatticeMDSystem(pdb.topology, pdb.positions, forcefield, "P 4
 mdsystem.buildSuperCell(1, 1, 1)
 mdsystem.addSolvent(neutralize=True, positiveIon="Na+", negativeIon="Cl-")
 mdsystem.save("prepped.pdb") # ! manually check if pdb file is correct
-mdsystem.saveCheckpoint("prepped_checkpoint"+0)
+mdsystem.saveCheckpoint("prepped_checkpoint")
 mdsystem.calmdown(posre=True)
 
 # Squeeze -- 0.05% tolerance of target box volume. 
@@ -27,7 +27,7 @@ ystem.buildSimulation(filePrefix=f"squeezed_production1",
 # intermediate checkpoints prevents losing stuff
 for i in range(5):
     mdsystem.simulate(20*nanoseconds)
-    mdsystem.saveCheckpoint("checkpoint"+(i+1))
+    mdsystem.saveCheckpoint("checkpoint"+str(i+1))
 
 
 # Plot squeeze run
