@@ -13,6 +13,7 @@ mdsystem = SolvatedMDSystem(pdb.topology, pdb.positions, forcefield)
 a = b = c = 90.013
 mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, ionicStrength=0.1*molar)
 mdsystem.save("prepped.pdb")
+mdsystem.saveCheckpoint("prepped_checkpoint"+0)
 
 # Equilibrate
 mdsystem.buildSimulation(posre=True)
@@ -23,6 +24,9 @@ mdsystem.save("equilibrated.pdb")
 mdsystem.buildSimulation(filePrefix=f"production1", 
                          saveTrajectory=True, trajInterval=50000, 
                          saveStateData=True, stateDataInterval=50000)
-mdsystem.simulate(100*nanoseconds)
+for i in range(5):
+    mdsystem.simulate(20*nanoseconds)
+    mdsystem.saveCheckpoint("checkpoint"+(i+1))
+
 
 
