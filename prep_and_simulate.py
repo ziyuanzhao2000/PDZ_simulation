@@ -1,5 +1,3 @@
-from openmmforcefields.generators import GAFFTemplateGenerator
-from openforcefield.topology import Molecule
 from simtk.openmm.app import ForceField
 from simtk.openmm.app import PDBFile
 from simtk.unit import *
