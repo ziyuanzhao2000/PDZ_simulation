@@ -7,8 +7,8 @@ import glob
 #sns.set_context("notebook", font_scale=1.3)
 import mdtraj
 
-forcefield = ForceField('amber/protein.ff14SB.xml', 
-                        'amber/tip3p.xml')
+forcefield = ForceField('amber14/protein.ff14SB.xml', 
+                        'amber14/tip3p.xml')
 # Load and solvate PDB
 pdb = PDBFile("pdz3_rat_apo_refined43_final.pdb")
 mdsystem = mdtools.LatticeMDSystem(pdb.topology, pdb.positions, forcefield, "P 41 3 2")
