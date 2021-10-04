@@ -14,6 +14,8 @@ pdb = PDBFile("pdz3_rat_apo_refined43_final.pdb")
 mdsystem = mdtools.LatticeMDSystem(pdb.topology, pdb.positions, forcefield, "P 41 3 2")
 mdsystem.buildSuperCell(1, 1, 1)
 mdsystem.addSolvent(neutralize=True, positiveIon="Na+", negativeIon="Cl-")
+mdsystem.save("prepped.pdb") # ! manually check if pdb file is correct
+mdsystem.saveCheckpoint("prepped_checkpoint"+0)
 mdsystem.calmdown(posre=True)
 
 # Squeeze -- 0.05% tolerance of target box volume. 
@@ -21,7 +23,11 @@ mdsystem.squeeze(tolerance=0.0005, maxIterations=20, maxSimtime=20*nanoseconds)
 ystem.buildSimulation(filePrefix=f"squeezed_production1", 
                          saveTrajectory=True, trajInterval=50000, 
                          saveStateData=True, stateDataInterval=50000)
-mdsystem.simulate(100*nanoseconds)
+
+# intermediate checkpoints prevents losing stuff
+for i in range(5):
+    mdsystem.simulate(20*nanoseconds)
+    mdsystem.saveCheckpoint("checkpoint"+(i+1))
 
 
 # Plot squeeze run
