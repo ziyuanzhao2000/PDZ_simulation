@@ -10,9 +10,10 @@ forcefield = ForceField('amber/protein.ff14SB.xml',
                         'tip3p.xml')
 
 # Load and solvate PDB
-pdb = PDBFile("1BFE_cleaned.pdb")
+pdb = PDBFile("pdz3_rat_apo_refined43_final.pdb")
 mdsystem = SolvatedMDSystem(pdb.topology, pdb.positions, forcefield)
-mdsystem.addSolvent(boxSize=(60, 60, 60)*angstroms, ionicStrength=0.1*molar)
+a = b = c = 90.013
+mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, ionicStrength=0.1*molar)
 mdsystem.save("prepped.pdb")
 
 # Equilibrate
@@ -24,6 +25,6 @@ mdsystem.save("equilibrated.pdb")
 mdsystem.buildSimulation(filePrefix=f"production1", 
                          saveTrajectory=True, trajInterval=50000, 
                          saveStateData=True, stateDataInterval=50000)
-mdsystem.simulate(1*microseconds)
+mdsystem.simulate(100*nanoseconds)
 
 
