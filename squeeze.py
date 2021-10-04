@@ -15,7 +15,6 @@ mdsystem = mdtools.LatticeMDSystem(pdb.topology, pdb.positions, forcefield, "P 4
 mdsystem.buildSuperCell(1, 1, 1)
 mdsystem.addSolvent(neutralize=True, positiveIon="Na+", negativeIon="Cl-")
 mdsystem.save("prepped.pdb") # ! manually check if pdb file is correct
-mdsystem.saveCheckpoint("prepped_checkpoint")
 mdsystem.calmdown(posre=True)
 
 # Squeeze -- 0.05% tolerance of target box volume. 
