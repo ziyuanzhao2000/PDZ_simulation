@@ -19,10 +19,10 @@ mdsystem.calmdown(posre=True)
 
 # Squeeze -- 0.05% tolerance of target box volume. 
 mdsystem.squeeze(tolerance=0.0005, maxIterations=20, maxSimtime=20*nanoseconds)
-ystem.buildSimulation(filePrefix=f"squeezed_production1", 
+mdsystem.buildSimulation(filePrefix=f"squeezed_production1", 
                          saveTrajectory=True, trajInterval=50000, 
-                         saveStateData=True, stateDataInterval=50000)
-
+                         saveStateData=True, stateDataInterval=50000, ensemble="NVT")
+mdsystem.saveCheckpoint("checkpoint"+str(0))
 # intermediate checkpoints prevents losing stuff
 for i in range(5):
     mdsystem.simulate(20*nanoseconds)
