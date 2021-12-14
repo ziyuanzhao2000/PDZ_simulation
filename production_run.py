@@ -36,12 +36,20 @@ for o, a in opts:
     elif o == "-o":
         outputname = a
 
+if dirname != "":
+    os.mkdir(dirname) # ignore err due to existing dir
+    os.chdir(dirname)
+
 pdb = PDBFile(inputname)
 
 # Starts production run on the squeezed system
 mdsystem.buildSimulation(filePrefix=outputname, 
-                         saveTrajectory=True, trajInterval=50000, 
+                         saveTrajectory=True, trajInterval=50000,                       # 50000 timestep * 0.002 ps = one save every 100 ns
                          saveStateData=True, stateDataInterval=50000, ensemble="NVT")
+
+if dryrun:
+    sys.exit(1)
+
 mdsystem.saveCheckpoint("checkpoint_"+str(0))
 
 # Intermediate checkpoints prevents losing stuff

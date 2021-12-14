@@ -7,7 +7,7 @@ import sys, getopt
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "Dvd:t:i:")
+    opts, args = getopt.getopt(sys.argv[1:], "Dvd:t:N:i:o:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -17,23 +17,29 @@ tol = 0.0005
 maxit = 20
 verbose = False
 dryrun = False
+inputname = "pdz3_rat_apo_refined43_final.pdb"
+outputname = "squeezed.pdb"
 
 for o, a in opts:
     if o == "-d":
         dirname = a
     elif o == "-t":
         tol = float(a)
-    elif o == "-i":
+    elif o == "-N":
         maxit = int(a)
     elif o == "-v":
         verbose = True
     elif o == "-D":
         dryrun = True
+    elif o == "-i":
+        inputname = a
+    elif o == "-o":
+        outputname = a
 
 forcefield = ForceField('amber14/protein.ff14SB.xml', 
                         'amber14/tip3p.xml')
 # Load and solvate PDB
-pdb = PDBFile("pdz3_rat_apo_refined43_final.pdb")
+pdb = PDBFile(inputname)
 
 if dirname != "":
     os.mkdir(dirname) # ignore err due to existing dir
@@ -57,7 +63,7 @@ if verbose:
 
 # Squeeze -- 0.05% tolerance of target box volume. 
 mdsystem.squeeze(tolerance=tol, maxIterations=maxit, maxSimtime=maxit*nanoseconds)
-mdsystem.save("squeezed.pdb")
+mdsystem.save(outputname)
 if verbose:
     print('Squeeze job completed. MDSystem saved to squeezed.pdb file.')
 
