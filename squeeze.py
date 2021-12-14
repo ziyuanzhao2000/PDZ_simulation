@@ -7,7 +7,7 @@ import sys, getopt
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vd:t:i:")
+    opts, args = getopt.getopt(sys.argv[1:], "Dvd:t:i:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -16,6 +16,7 @@ dirname = ""
 tol = 0.0005
 maxit = 20
 verbose = False
+dryrun = False
 
 for o, a in opts:
     if o == "-d":
@@ -26,6 +27,8 @@ for o, a in opts:
         maxit = int(a)
     elif o == "-v":
         verbose = True
+    elif o == "-D":
+        dryrun = True
 
 forcefield = ForceField('amber14/protein.ff14SB.xml', 
                         'amber14/tip3p.xml')
@@ -40,6 +43,10 @@ if dirname != "":
 mdsystem = mdtools.LatticeMDSystem(pdb.topology, pdb.positions, forcefield, "P 41 3 2")
 mdsystem.buildSuperCell(1, 1, 1)
 mdsystem.addSolvent(neutralize=True, positiveIon="Na+", negativeIon="Cl-")
+
+if dryrun:
+    sys.exit(1)
+
 mdsystem.save("prepped.pdb") # Should manually check if the structure is correct before proceeding
 if verbose:
     print('Unit super cell built, solvent added, system neutralized.')
