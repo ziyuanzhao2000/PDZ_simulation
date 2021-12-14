@@ -2,3 +2,8 @@
 *#
 *.cif
 *.vim
+*.csv
+*.h5
+*.out
+*.err
+*.chkpt
