@@ -44,7 +44,7 @@ mdsystem = mdtools.LatticeMDSystem(pdb.topology, pdb.positions, forcefield, "P 4
 mdsystem.buildSuperCell(1, 1, 1)
 mdsystem.addSolvent(neutralize=True, positiveIon="Na+", negativeIon="Cl-")
 
-if dryrun:
+if dryrun: 
     sys.exit(1)
 
 mdsystem.save("prepped.pdb") # Should manually check if the structure is correct before proceeding
