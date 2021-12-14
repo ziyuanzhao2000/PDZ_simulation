@@ -42,7 +42,10 @@ forcefield = ForceField('amber14/protein.ff14SB.xml',
 pdb = PDBFile(inputname)
 
 if dirname != "":
-    os.mkdir(dirname) # ignore err due to existing dir
+    try: 
+        os.mkdir(dirname)
+    except:
+        pass # ignore err due to existing dir 
     os.chdir(dirname)
 
 # Prepare the system

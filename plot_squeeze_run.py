@@ -33,7 +33,10 @@ for o, a in opts:
 sns.set_context("notebook", font_scale=1.3)
 
 if dirname != "":
-    os.mkdir(dirname) # ignore err due to existing dir
+    try: 
+        os.mkdir(dirname)
+    except:
+        pass # ignore err due to existing dir 
     os.chdir(dirname)
 
 h5trajs = sorted(glob.glob(inputname+"*.h5"))
