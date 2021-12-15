@@ -47,7 +47,7 @@ pdb = PDBFile(inputname)
 
 # Starts production run on the squeezed system
 mdsystem.buildSimulation(filePrefix=outputname, 
-                         saveTrajectory=True, trajInterval=50000,                       # 50000 timestep * 0.002 ps = one save every 100 ns
+                         saveTrajectory=True, trajInterval=50000,                       # 50000 timestep * 0.002 ps = one save every 100 ps
                          saveStateData=True, stateDataInterval=50000, ensemble="NVT")
 
 if dryrun:
