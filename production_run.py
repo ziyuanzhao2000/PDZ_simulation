@@ -44,7 +44,10 @@ if dirname != "":
     os.chdir(dirname)
 
 pdb = PDBFile(inputname)
+forcefield = ForceField('amber14/protein.ff14SB.xml', 
+                        'amber14/tip3p.xml')
 
+mdsystem = mdtools.MDSystem(pdb.topology, pdb.positions, forcefield)
 # Starts production run on the squeezed system
 mdsystem.buildSimulation(filePrefix=outputname, 
                          saveTrajectory=True, trajInterval=50000,                       # 50000 timestep * 0.002 ps = one save every 100 ps

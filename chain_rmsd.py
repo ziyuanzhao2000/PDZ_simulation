@@ -1,3 +1,6 @@
+# This is mostly pseudocode
+
+# and actually not quite right... see the notebook for the actual procedure.
 import mdtraj
 import matplotlib.pyplot as pyplot
 import os
