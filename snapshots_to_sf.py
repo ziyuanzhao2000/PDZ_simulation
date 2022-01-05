@@ -1,0 +1,61 @@
+# This script works with slurm job batcher to
+# convert input snapshots of MD trajectory to
+# structural factors using phenix.fmodel
+
+import sys, os, getopt
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "vi:I:f:c:N:n:")
+except getopt.GetoptError as err:
+    print(err)
+    sys.exit(1)
+
+verbose = False
+input_name = "" # must supply input name!
+dirname = ""
+frame_id = 0
+chain_id = 0
+array_index = 0
+n_frame = 101
+n_chain = 24
+
+for o, a in opts:
+    if o == "-v":
+        verbose = True
+    elif o == "-i":
+        input_name = a
+    elif o == "-f":
+        frame_id = a
+    elif o == "-c":
+        chain_id = a
+    elif o == "-I":
+        array_index = a
+    elif o == "-N":
+        n_frame = a
+    elif o == "-n":
+        n_chain = a
+    elif d == "-n":
+        dirname = a
+
+if dirname != "":
+    try:
+        os.mkdir(dirname)
+    except:
+        pass # ignore err due to existing dir
+    os.chdir(dirname)
+
+
+if array_index > 0:
+    frame_id = array_index // n_chain
+    chain_id = array_index % n_chain
+
+if frame_id < 0 or frame_id >= n_frame or chain_id < 0 or chain_id >= n_chain:
+    print("Please input a correct frame and chain id!")
+    sys.exit(1)
+
+if verbose:
+    print("Starting to call phenix.fmodel.")
+os.system(f'phenix.fmodel {input_name}_{frame_id}_{chain_id}.pdb high_resolution=1.5')
+
+if verbose:
+    print("Phenix.fmodel finished.")
