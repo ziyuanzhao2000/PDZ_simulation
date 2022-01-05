@@ -1,18 +1,61 @@
 import mdtraj
+import os
+import sys, getopt
 
 frame_skip = 10 # sample trajectory every 'frame_skip' frames
 n_chains = 48 # 2 * 24
 
+# parse cmdline args in a C-like manner
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "Dd:v:i:r:o:")
+except getopt.GetoptError as err:
+    print(err)
+    sys.exit(1)
+
+dirname = ""
+verbose = False
+dryrun = False
+inputname = "production.h5"
+refname = "reference.pdb"
+outputname = "liganded_pdz_traj_"
+
+for o, a in opts:
+    if o == "-v":
+        verbose = True
+    elif o == "-D":
+        dryrun = True
+    elif o == "-i":
+        inputname = a
+    elif o == "-o":
+        outputname = a
+    elif o == "-r":
+        refname = a
+    elif o == "-d":
+        dirname = a
+
+if dirname != "":
+    try:
+        os.mkdir(dirname)
+    except:
+        pass # ignore err due to existing dir
+    os.chdir(dirname)
+
 # Loads the .h5 trajectory file from the post-squeeze production run using OpenMM
-target_traj = mdtraj.load("/Users/zhaoziyuan/Dropbox/Fall21/Research/Doeke_lab/PDZ_simulation/liganded_squeezed_production1.h5")
+target_traj = mdtraj.load(inputname)
 top = target_traj.topology
 
 # slice
 target_traj = target_traj[::frame_skip]
-ref_traj = mdtraj.load("/Users/zhaoziyuan/Dropbox/Fall21/Research/Doeke_lab/PDZ_simulation/pdz3_cript_ds1_refine_193_fixed.pdb")
+ref_traj = mdtraj.load(refname)
+
+if verbose:
+    print("Loaded and sliced trajectory")
+if dryrun:
+    sys.exit(1)
 
 for i, frame in enumerate(target_traj):
-    for chain_id in range(0, 48, 2):
+    for chain_id in range(0, n_chains, 2):
         chain = frame.atom_slice(top.select("chainid " + str(chain_id) + " or chainid " + str(chain_id + 1) + " and protein"))
         chain.superpose(ref_traj) # align using all atoms, water, ions, and protein included
-        chain.save_pdb("liganded_pdz_traj_" + str(i) + "_" + str(chain_id / 2) + ".pdb")
+        chain.save_pdb(outputname + str(i) + "_" + str(chain_id / 2) + ".pdb")
+    print(f"Finished outputting snapshots for frame {i * frame_skip}")
