@@ -1,7 +1,7 @@
 import reciprocalspaceship as rs
 import numpy as np
 import pandas as pd
-import sys, os
+import sys, os, getopt
 
 # parse cmdline args in a C-like manner
 try:
