@@ -5,7 +5,7 @@ import sys, os, getopt
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:c:n")
+    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:c:n:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -60,8 +60,8 @@ for frame in range(n_frames):
 complex_reflections /= n_frames
 
 # convert back to polar form and bind the composite indices
-avg_dataset[:] = np.stack([np.abs(complex_reflections), np.angle(complex_reflections) / np.pi * 180]).T
-avg_dataset.infer_mtz_dtypes(inplace = True)
-avg_dataset.write_mtz(f"{input_name}_avg_{chain_id}.mtz")
+dataset[:] = np.stack([np.abs(complex_reflections), np.angle(complex_reflections) / np.pi * 180]).T
+dataset.infer_mtz_dtypes(inplace = True)
+dataset.write_mtz(f"{input_name}_avg_{chain_id}.mtz")
 if verbose:
     print("Wrote average structural factor to the .mtz file!")
