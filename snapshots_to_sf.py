@@ -16,7 +16,7 @@ dirname = ""
 frame_id = 0
 chain_id = 0
 array_index = 0
-n_frame = 101
+n_frame = 100
 n_chain = 24
 
 for o, a in opts:

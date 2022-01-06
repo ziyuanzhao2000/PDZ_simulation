@@ -57,5 +57,5 @@ for i, frame in enumerate(target_traj):
     for chain_id in range(0, n_chains, 2):
         chain = frame.atom_slice(top.select("chainid " + str(chain_id) + " or chainid " + str(chain_id + 1) + " and protein"))
         chain.superpose(ref_traj) # align using all atoms, water, ions, and protein included
-        chain.save_pdb(f"{outputname}_{i}_{chain_id / 2}.pdb")
+        chain.save_pdb(f"{outputname}_{i}_{(chain_id / 2):d}.pdb")
     print(f"Finished outputting snapshots for frame {i * frame_skip}")

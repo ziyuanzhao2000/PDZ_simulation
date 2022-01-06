@@ -7,4 +7,5 @@
 #SBATCH -e snapshots_to_sf.err
 source ~/.bashrc
 source /n/holylfs/LABS/hekstra_lab/garden/phenix/phenix-1.16-3549/phenix_env.sh
-python snapshots_to_sf.py -d Dec15_liganded_PDZ -c 0 -f ${SLURM_ARRAY_TASK_ID} -v
+python snapshots_to_sf.py -d Dec15_liganded_PDZ -c 0 -f ${SLURM_ARRAY_TASK_ID} -i traj_snapshot -d Dec15_liganded_PDZ -v
+# run a script that renames all mtz file to discard the pdb stub
