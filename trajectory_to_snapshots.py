@@ -7,7 +7,7 @@ n_chains = 48 # 2 * 24
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "Dd:v:i:r:o:")
+    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:r:o:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
