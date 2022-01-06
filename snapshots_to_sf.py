@@ -25,15 +25,15 @@ for o, a in opts:
     elif o == "-i":
         input_name = a
     elif o == "-f":
-        frame_id = a
+        frame_id = int(a)
     elif o == "-c":
-        chain_id = a
+        chain_id = int(a)
     elif o == "-I":
-        array_index = a
+        array_index = int(a)
     elif o == "-N":
-        n_frame = a
+        n_frame = int(a)
     elif o == "-n":
-        n_chain = a
+        n_chain = int(a)
     elif o == "-d":
         dirname = a
 

@@ -6,5 +6,5 @@
 #SBATCH -o snapshots_to_sf.out
 #SBATCH -e snapshots_to_sf.err
 source ~/.bashrc
-conda activate openmm
-python snapshots_to_sf.py -d Dec15_liganded_PDZ -I ${SLURM_ARRAY_TASK_ID} -v
+source /n/holylfs/LABS/hekstra_lab/garden/phenix/phenix-1.16-3549/phenix_env.sh
+python snapshots_to_sf.py -d Dec15_liganded_PDZ -c 0 -f ${SLURM_ARRAY_TASK_ID} -v
