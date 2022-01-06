@@ -5,7 +5,7 @@
 import sys, os, getopt
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vi:I:f:c:N:n:")
+    opts, args = getopt.getopt(sys.argv[1:], "vi:I:f:c:N:n:d:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -34,7 +34,7 @@ for o, a in opts:
         n_frame = a
     elif o == "-n":
         n_chain = a
-    elif d == "-n":
+    elif o == "-d":
         dirname = a
 
 if dirname != "":
