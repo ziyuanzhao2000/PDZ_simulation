@@ -4,4 +4,5 @@ Prerequisite modules you need to install:
 * openMM,
 * mdtraj,
 * msmbuilder (note this requires python no later than 3.6),
-and, of course, their prerequisites.
+* [reciprocalspaceship](https://hekstra-lab.github.io/reciprocalspaceship/)
+and, of course, their dependencies.
