@@ -62,9 +62,9 @@ if frame_id < 0 or frame_id >= n_frame or chain_id < 0 or chain_id >= n_chain:
 if verbose:
     print("Starting to call phenix.fmodel.")
 if chainwise:
-    os.system(f'phenix.fmodel {input_name}_{frame_id}_{chain_id}.pdb high_resolution={resolution}')
+    os.system(f'phenix.fmodel {input_name}_{frame_id}_{chain_id} high_resolution={resolution}')
 else:
-    os.system(f'phenix.fmodel {input_name}_{frame_id}.pdb high_resolution={resolution}')
+    os.system(f'phenix.fmodel {input_name}_{frame_id} high_resolution={resolution}')
 
 if verbose:
     print("Phenix.fmodel finished.")
