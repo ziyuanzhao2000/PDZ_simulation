@@ -7,7 +7,7 @@ n_chains = 48 # 2 * 24
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:r:o:")
+    opts, args = getopt.getopt(sys.argv[1:], "vDcd:i:r:o:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -15,9 +15,11 @@ except getopt.GetoptError as err:
 dirname = ""
 verbose = False
 dryrun = False
+chainwise = False
 inputname = "production.h5"
 refname = "reference.pdb"
 outputname = "liganded_pdz_traj_"
+
 
 for o, a in opts:
     if o == "-v":
@@ -32,6 +34,8 @@ for o, a in opts:
         refname = a
     elif o == "-d":
         dirname = a
+    elif o == "-c":
+        chainwise = True
 
 if dirname != "":
     try:
@@ -54,8 +58,11 @@ if dryrun:
     sys.exit(1)
 
 for i, frame in enumerate(target_traj):
-    for chain_id in range(0, n_chains, 2):
-        chain = frame.atom_slice(top.select("chainid " + str(chain_id) + " or chainid " + str(chain_id + 1) + " and protein"))
-        chain.superpose(ref_traj) # align using all atoms, water, ions, and protein included
-        chain.save_pdb(f"{outputname}_{i}_{(chain_id / 2):d}.pdb")
+    if chainwise:
+        for chain_id in range(0, n_chains, 2):
+            chain = frame.atom_slice(top.select("chainid " + str(chain_id) + " or chainid " + str(chain_id + 1) + " and protein"))
+            chain.superpose(ref_traj) # align using all atoms, water, ions, and protein included
+            chain.save_pdb(f"{outputname}_{i}_{(chain_id / 2):d}.pdb")
+    else:
+        frame.superpose(ref_traj, atom_indices = top.select("is_backbone")).save_pdb(f"{outputname}_{i}.pdb")
     print(f"Finished outputting snapshots for frame {i * frame_skip}")
