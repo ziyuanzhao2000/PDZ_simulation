@@ -64,5 +64,5 @@ for i, frame in enumerate(target_traj):
             chain.superpose(ref_traj) # align using all atoms, water, ions, and protein included
             chain.save_pdb(f"{outputname}_{i}_{(chain_id / 2):d}.pdb")
     else:
-        frame.superpose(ref_traj, atom_indices = top.select("is_backbone")).save_pdb(f"{outputname}_{i}.pdb")
+        frame.superpose(ref_traj, atom_indices = top.select("is_backbone"), ref_atom_indices = top.select("is_backbone")).save_pdb(f"{outputname}_{i}.pdb")
     print(f"Finished outputting snapshots for frame {i * frame_skip}")
