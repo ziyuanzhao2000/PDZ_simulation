@@ -4,7 +4,7 @@ import sys, os, getopt
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:c:n:C:w:")
+    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:c:n:C:a:w:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -35,6 +35,7 @@ for o, a in opts:
     elif o == "-C":
         chainwise = True
     elif o == "-w":
+        accumulating_avg = True
         accumulating_window = int(a)
 
 
