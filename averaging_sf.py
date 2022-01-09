@@ -1,11 +1,10 @@
 import reciprocalspaceship as rs
 import numpy as np
-import pandas as pd
 import sys, os, getopt
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:c:n:C:")
+    opts, args = getopt.getopt(sys.argv[1:], "vDd:i:c:n:C:w:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -17,6 +16,8 @@ dirname = ""
 verbose = False
 dryrun = False
 chainwise = False
+accumulating_avg = False
+accumulating_window = 10 # frames
 
 for o, a in opts:
     if o == "-v":
@@ -33,6 +34,8 @@ for o, a in opts:
         n_frames = int(a)
     elif o == "-C":
         chainwise = True
+    elif o == "-w":
+        accumulating_window = int(a)
 
 
 if dirname != "":
@@ -61,12 +64,18 @@ for frame in range(n_frames):
         dataset = rs.read_mtz(f"{input_name}_{frame}_{chain_id}.mtz")
     else:
         dataset = rs.read_mtz(f"{input_name}_{frame}.mtz")
-    complex_reflections += np.array([amp*np.exp(np.pi*phase/180 * 1j) for [amp, phase] in dataset.to_numpy()])
+
+    complex_reflections = complex_reflections * (1 - 1/(frame + 1)) + np.array([amp*np.exp(np.pi*phase/180 * 1j) for [amp, phase] in dataset.to_numpy()]) / (frame + 1)
+
     if verbose:
         print(f"Finished processing frame {frame}")
     if dryrun:
         sys.exit(1)
-complex_reflections /= n_frames
+    if (frame + 1) % accumulating_avg == 0 and accumulating_avg:
+        if chainwise:
+            dataset.write_mtz(f"{input_name}_avg_acc_{frame + 1}_{chain_id}.mtz")
+        else:
+            dataset.write_mtz(f"{input_name}_avg_acc_{frame + 1}.mtz")
 
 # convert back to polar form and bind the composite indices
 dataset[:] = np.stack([np.abs(complex_reflections), np.angle(complex_reflections) / np.pi * 180]).T
