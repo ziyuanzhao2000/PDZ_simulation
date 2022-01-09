@@ -73,6 +73,9 @@ for frame in range(n_frames):
     if dryrun:
         sys.exit(1)
     if (frame + 1) % accumulating_avg == 0 and accumulating_avg:
+        # convert back to polar form and bind the composite indices, make this a function?
+        dataset[:] = np.stack([np.abs(complex_reflections), np.angle(complex_reflections) / np.pi * 180]).T
+        dataset.infer_mtz_dtypes(inplace=True)
         if chainwise:
             dataset.write_mtz(f"{input_name}_avg_acc_{frame + 1}_{chain_id}.mtz")
         else:
