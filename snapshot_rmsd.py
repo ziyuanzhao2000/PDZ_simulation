@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vDd:r:N:t:o:")
+    opts, args = getopt.getopt(sys.argv[1:], "vDd:r:N:t:o:i:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -47,11 +47,16 @@ if dirname != "":
 # load reference trajectory and topology from first frame
 ref_traj = md.load(f"{ref_name}.pdb")
 ref_top = ref_traj[0].topology
+if verbose:
+    print("Loaded reference trajectory.")
+
 unit_cell_rmsd = []
 for i in range(n_frames):
     target_traj = md.load(f"{target_name}_{i}.pdb")
     target_top = target_traj[0].topology
     unit_cell_rmsd.append(md.rmsd(target_traj, ref_traj, 0, ref_top.select("is_backbone")))
+    if verbose:
+        print(f"Calculated rmsd for frame {i}.")
 
 unit_cell_rmsd = np.array(unit_cell_rmsd)
 plt.figure(figsize=(18, 12))
@@ -63,4 +68,7 @@ plt.ylabel("RMSD (nm)")
 plt.plot(unit_cell_rmsd, label = "unit cell 1")
 plt.legend(loc = 'upper right')
 plt.savefig(f'{output_name}.pdf')
+
+if verbose:
+    print(f"Plot saved to {output_name}.pdf")
 
