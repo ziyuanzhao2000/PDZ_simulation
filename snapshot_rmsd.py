@@ -1,3 +1,8 @@
+# This loads a collection of snapshot pdz files and calculate a data series of rmsd wrt the reference structure
+# It's slow compared to directly computing rmsd on the starting trajectory! So...the case this script is useful
+# is perhaps when you first slice and transform the snapshots. Otherwise go use the chain_rmsd notebook for
+# the data processing.
+
 import numpy as np
 import sys, os, getopt
 import mdtraj as md
