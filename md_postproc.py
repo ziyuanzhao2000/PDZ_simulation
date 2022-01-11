@@ -63,6 +63,6 @@ ax.set_xticklabels(np.arange(0, n_frames,100) / 10)
 ax.set_ylabel("RMSD (nm)")
 ax.plot(unit_cell_rmsd, label = "unit cell 1")
 ax.legend(loc = 'upper right')
-fig1.save(f'{output_name}_unitcell_rmsd.pdf')
+fig1.savefig(f'{output_name}_unitcell_rmsd.pdf')
 if verbose:
     print("Produced plot for unit-cell backbone RMSD from the trajectory.")
