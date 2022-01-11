@@ -38,10 +38,10 @@ if dir_name != "":
 meta, ttrajs = load_trajs('ttrajs')
 n_trajs = len(ttrajs.keys())
 
-fig1 = plt.figure(figsize=(8, 6 * n_trajs))
+fig1 = plt.figure(figsize=(8 * 4, 6 * n_trajs))
 for i, k in enumerate(ttrajs.keys()):
     traj = ttrajs[k]
-    ax = fig1.add_subplot(n_trajs, 1, i+1)
+    ax = fig1.add_subplot(n_trajs // 4, 4, i+1)
     ax.plot(traj[:,dim])
     ax.set_ylim([-3,3]) # should extract this from data
 fig1.savefig(f"{output_name}_dim_{dim}.pdf")

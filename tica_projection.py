@@ -77,7 +77,7 @@ if phase == 2:
     ## Load
     meta = load_meta()
     tops = preload_tops(meta)
-    dihed_feat = DihedralFeaturizer()
+    dihed_feat = DihedralFeaturizer(types=['phi', 'psi'], sincos=True)
 
     ## Featurize logic
     def feat(irow):
