@@ -40,8 +40,10 @@ if dir_name != "":
         pass # ignore err due to existing dir
     os.chdir(dir_name)
 
+
+target_traj = mdtraj.load(f"{input_name}.h5") # currently only support h5 file!
+
 if skip == False:
-    target_traj = mdtraj.load(f"{input_name}.h5") # currently only support h5 file!
     smartWrapProtein(target_traj)
     target_traj.save_hdf5(f"{input_name}.h5") # overwrites
     if verbose:
