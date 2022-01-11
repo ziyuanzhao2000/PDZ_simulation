@@ -9,7 +9,7 @@ from utils import smartWrapProtein
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vd:i:o:n:s:")
+    opts, args = getopt.getopt(sys.argv[1:], "svd:i:o:n:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -58,7 +58,8 @@ fig1 = plt.figure(figsize=(18, 12))
 ax = fig1.add_subplot()
 ax.set_title("PDZ domain, unit cell RMSD")
 ax.set_xlabel("Time (ns)")
-ax.set_xticks(np.arange(0, n_frames,100), np.arange(0, n_frames,100) / 10)
+ax.set_xticks(np.arange(0, n_frames,100))
+ax.set_xticklabels(np.arange(0, n_frames,100) / 10)
 ax.set_ylabel("RMSD (nm)")
 ax.plot(unit_cell_rmsd, label = "unit cell 1")
 ax.legend(loc = 'upper right')
