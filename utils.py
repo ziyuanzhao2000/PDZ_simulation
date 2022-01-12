@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 # Jack Greisman's script from https://github.com/Hekstra-Lab/mdtools/blob/1f71b90d8a80d6a9d216d6a980c05221998f428a/mdtools/analysis/latticemdtrajectory.py#L37
-def smartWrapMolecule(traj: mdtraj.Trajectory, indices: list[int]) -> None:
+def smartWrapMolecule(traj: mdtraj.Trajectory, indices: list) -> None:
     """
     This function applies periodic wrapping to a given set of atomic
     indices to prevent their center of mass from jumping by a unit
