@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 # Jack Greisman's script from https://github.com/Hekstra-Lab/mdtools/blob/1f71b90d8a80d6a9d216d6a980c05221998f428a/mdtools/analysis/latticemdtrajectory.py#L37
-def smartWrapMolecule(traj: mdtraj.Trajectory, indices: list) -> None:
+def smartWrapMolecule(traj: mdtraj.Trajectory, indices: list[int]) -> None:
     """
     This function applies periodic wrapping to a given set of atomic
     indices to prevent their center of mass from jumping by a unit
@@ -42,17 +42,18 @@ def smartWrapMolecule(traj: mdtraj.Trajectory, indices: list) -> None:
     traj.xyz[:, indices, :] += (mask * traj.unitcell_lengths).reshape(-1, 1, 3)
 
 
-def smartWrapProtein(traj: mdtraj.Trajectory) -> None:
+def smartWrapProtein(traj: mdtraj.Trajectory, ref: mdtraj.Trajectory) -> None:
     """
     Apply smart wrapping independently to each protein molecule in
     the MD system. For now, this method identifies proteins as
     molecules with more than 100 atoms
     """
-
+    traj = ref + traj
     for mol in traj.topology.find_molecules():
         if len(mol) > 100:
             indices = [atom.index for atom in mol]
             smartWrapMolecule(traj, indices)
+    return traj[1:]
 
 
 # 24 chains from the P 41 3 2 space group, we will calculate RMSD for each

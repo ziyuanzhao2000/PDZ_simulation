@@ -18,6 +18,7 @@ verbose = False
 dir_name = ""
 input_name = "production"
 output_name = "production"
+ref_name = "prepped"
 dim = 0
 skip = False
 
@@ -42,9 +43,12 @@ if dir_name != "":
 
 
 target_traj = mdtraj.load(f"{input_name}.h5") # currently only support h5 file!
+target_top = target_traj.topology
+ref_traj = mdtraj.load(f"{ref_name}.h5") # currently only support h5 file!
+ref_top = ref_traj.topology
 
 if skip == False:
-    smartWrapProtein(target_traj)
+    target_traj = smartWrapProtein(target_traj.atom_slice(target_top.select("is_protein")), ref_traj.atom_slice(ref_top.select("is_protein")))
     target_traj.save_hdf5(f"{input_name}.h5") # overwrites
     if verbose:
         print("Wrapped proteins at box boundaries and saved the new trajectory.")
