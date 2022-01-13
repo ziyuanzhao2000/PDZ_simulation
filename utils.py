@@ -2,6 +2,31 @@ import mdtraj
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Courtesy of Jack's code
+def compare_symops(mtz, n, original_sg=213):
+    """
+    The function takes a number and returns a dataset that has the x,y,z
+    reflection (reciprocal space ASU) joined with the corresponding
+    symmetry-related one under the given symop.
+
+    :param mtz: A reciprocalspaceship Dataset
+    :param n: the index of symop belonging to a particular space group, refer to ITC for their definitions
+    :param original_sg: The space group that the dataset is assumed to come from
+    :return: a Dataset including all pairs of reflections related by the specified symop
+    """
+    ds = mtz.copy()
+
+    # Map P1 reflections to original ASU
+    ds.spacegroup = original_sg
+    asu = ds.hkl_to_asu()
+
+    # Find common reflections
+    common = asu.loc[asu["M/ISYM"]  == 1].index.intersection(asu.loc[asu["M/ISYM"]  == n].index).sort_values()
+    asu = asu.loc[common]
+    asu1 = asu.loc[asu["M/ISYM"] == 1].reset_index()
+    asu2 = asu.loc[asu["M/ISYM"] == n].reset_index()
+
+    return asu1.merge(asu2, on=["H", "K", "L"], suffixes=(1, 2))
 
 # Jack Greisman's script from https://github.com/Hekstra-Lab/mdtools/blob/1f71b90d8a80d6a9d216d6a980c05221998f428a/mdtools/analysis/latticemdtrajectory.py#L37
 def smartWrapMolecule(traj: mdtraj.Trajectory, indices: list) -> None:

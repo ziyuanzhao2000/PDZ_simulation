@@ -42,7 +42,7 @@ for o, a in opts:
 forcefield = ForceField('amber14/protein.ff14SB.xml', 
                         'amber14/tip3p.xml')
 # Load and solvate PDB
-pdb = PDBFile(inputname)
+pdb = PDBFile(f"{inputname}.pdb")
 
 if dirname != "":
     try: 
