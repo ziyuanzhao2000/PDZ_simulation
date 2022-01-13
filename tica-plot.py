@@ -17,10 +17,10 @@ import os, sys, getopt
 
 verbose = False
 dir_name = ""
-
+trajs_dir_name = "ttrajs"
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vd:")
+    opts, args = getopt.getopt(sys.argv[1:], "vd:t:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -30,6 +30,8 @@ for o, a in opts:
         verbose = True
     elif o == "-d":
         dir_name = a
+    elif o == "-t":
+        trajs_dir_name = a
 
 if dir_name != "":
     try:
@@ -43,7 +45,7 @@ colors = sns.color_palette()
 
 ## Load
 tica = load_generic('tica.pickl')
-meta, ttrajs = load_trajs('ttrajs')
+meta, ttrajs = load_trajs(trajs_dir_name)
 txx = np.concatenate(list(ttrajs.values()))
 
 ## Heatmap
