@@ -73,7 +73,7 @@ mdsystem.buildSimulation(filePrefix=f"{outputname}",
                          saveStateData=True, stateDataInterval=50000)
 mdsystem.saveCheckpoint("checkpoint_0")
 
-for i in tqdm(range(n_phases)):
+for i in tqdm.tqdm(range(n_phases)):
     mdsystem.simulate(t_per_phase*nanoseconds)
     mdsystem.saveCheckpoint(f"checkpoint_{i+1}")
     if verbose:
