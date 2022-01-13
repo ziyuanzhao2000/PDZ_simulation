@@ -6,6 +6,7 @@ from simtk.unit import *
 
 from mdtools import SolvatedMDSystem
 import os, sys, getopt
+import tqdm
 
 # parse cmdline args in a C-like manner
 try:
@@ -22,8 +23,9 @@ verbose = False
 dryrun = False
 inputname = "pdz3_rat_apo_refined43_final"
 outputname = "production"
-n_phases = 5
-t_per_phase = 20
+n_phases = 1000
+t_per_phase = 10
+t_eq = 10
 
 for o, a in opts:
     if o == "-d":
@@ -63,16 +65,18 @@ if dryrun:
 
 # Equilibrate
 mdsystem.buildSimulation(posre=True)
-mdsystem.equilibrate(10*nanoseconds, posre=True)
+mdsystem.equilibrate(t_eq*nanoseconds, posre=True)
 mdsystem.save("equilibrated.pdb")
 
 # Production run
 mdsystem.buildSimulation(filePrefix=f"{outputname}",
                          saveTrajectory=True, trajInterval=50000, 
                          saveStateData=True, stateDataInterval=50000)
-for i in range(5):
-    mdsystem.simulate(20*nanoseconds)
+for i in tqdm(range(n_phases)):
+    mdsystem.simulate(t_per_phase*nanoseconds)
     mdsystem.saveCheckpoint("checkpoint"+(i+1))
+    if verbose:
+        tqdm.write(f"Phase {i} completed, simulated for {i * t_per_phase} ns in total!")
 
 
 
