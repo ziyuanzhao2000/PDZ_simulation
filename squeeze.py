@@ -65,7 +65,7 @@ if verbose:
     print('System calmed down. Squeeze job about to begin.')
 
 # Squeeze -- 0.05% tolerance of target box volume. 
-mdsystem.squeeze(tolerance=tol, maxIterations=maxit, maxSimtime=maxit*nanoseconds)
+mdsystem.squeeze(tolerance=tol, maxIterations=maxit, maxSimtime=5*nanoseconds)
 mdsystem.save(outputname)
 if verbose:
     print('Squeeze job completed. MDSystem saved to squeezed.pdb file.')
