@@ -58,7 +58,6 @@ a = b = c = 90.013
 #mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, ionicStrength=0.1*molar)
 mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, positiveIon="Na+", negativeIon="Cl-")
 mdsystem.save("prepped.pdb")
-mdsystem.saveCheckpoint("checkpoint_0")
 
 if dryrun:
     sys.exit(1)
@@ -72,6 +71,8 @@ mdsystem.save("equilibrated.pdb")
 mdsystem.buildSimulation(filePrefix=f"{outputname}",
                          saveTrajectory=True, trajInterval=50000, 
                          saveStateData=True, stateDataInterval=50000)
+mdsystem.saveCheckpoint("checkpoint_0")
+
 for i in tqdm(range(n_phases)):
     mdsystem.simulate(t_per_phase*nanoseconds)
     mdsystem.saveCheckpoint(f"checkpoint_{i+1}")
