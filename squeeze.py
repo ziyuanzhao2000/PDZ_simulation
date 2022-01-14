@@ -59,14 +59,13 @@ if dirname != "":
 mdsystem = mdtools.LatticeMDSystem(pdb.topology, pdb.positions, forcefield, "P 41 3 2")
 mdsystem.buildSuperCell(1, 1, 1)
 mdsystem.addSolvent(neutralize=True, positiveIon="Na+", negativeIon="Cl-")
-
-if dryrun: 
-    sys.exit(1)
-
-mdsystem.save("prepped.pdb") # Should manually check if the structure is correct before proceeding
 if verbose:
     print('Unit super cell built, solvent added, system neutralized.')
 
+if dryrun:
+    sys.exit(1)
+
+mdsystem.save("prepped.pdb") # Should manually check if the structure is correct before proceeding
 mdsystem.calmdown(posre=True)
 if verbose:
     print('System calmed down. Squeeze job about to begin.')
