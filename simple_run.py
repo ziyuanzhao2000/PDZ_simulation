@@ -27,6 +27,8 @@ n_phases = 1000
 t_per_phase = 10
 t_eq = 10
 box_width = 65 # angstrom
+solvate = True
+equilibriate = True
 
 for o, a in opts:
     if o == "-d":
