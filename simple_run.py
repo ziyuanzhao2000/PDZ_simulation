@@ -10,7 +10,7 @@ import tqdm
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "Dvd:i:o:n:t:")
+    opts, args = getopt.getopt(sys.argv[1:], "Dvsed:i:o:n:t:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
