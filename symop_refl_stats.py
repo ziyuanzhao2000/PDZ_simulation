@@ -9,7 +9,7 @@ from utils import compare_symops
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "v:d:i:o:g:n:D:t:")
+    opts, args = getopt.getopt(sys.argv[1:], "vd:i:o:g:n:D:t:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -41,11 +41,12 @@ for o, a in opts:
     elif o == "-v":
         verbose = True
 
-
 time_series_index = list(np.arange(0,n_frames,d_frame)*t_per_frame)
 for i, symop in enumerate(gemmi.find_spacegroup_by_number(sg).operations()):
     var_diff_in_mag = []
     var_mag_of_cdiff = []
+    if verbose:
+        print(f"Starting to processing symop no.{i+1}")
     for frame in range(0, n_frames, d_frame):
         try:
             dataset = rs.read_mtz(f"{input_name}_{i}.mtz")
