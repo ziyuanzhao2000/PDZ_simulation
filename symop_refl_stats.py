@@ -41,19 +41,17 @@ for o, a in opts:
     elif o == "-v":
         verbose = True
 
-try:
-    dataset = rs.read_mtz(f"{input_name}.mtz")
-    n_reflections = dataset.shape[0]
-
-except:
-    print("Can't load the mtz file for the designated chain at frame 0!")
-    sys.exit(1)
 
 time_series_index = list(np.arange(0,n_frames,d_frame)*t_per_frame)
 for i, symop in enumerate(gemmi.find_spacegroup_by_number(sg).operations()):
     var_diff_in_mag = []
     var_mag_of_cdiff = []
     for frame in range(0, n_frames, d_frame):
+        try:
+            dataset = rs.read_mtz(f"{input_name}_{i}.mtz")
+        except:
+            print(f"Can't load {input_name}_{i}.mtz!")
+            sys.exit(1)
         symop_dataset = compare_symops(dataset, i + 1, sg)
         var_diff_in_mag.append(np.var(np.abs(symop_dataset['FMODEL1'] - symop_dataset['FMODEL2'])))
         var_mag_of_cdiff.append(np.var(np.abs(to_sf(symop_dataset['FMODEL1'], symop_dataset['PHIFMODEL1']) -\
