@@ -42,6 +42,10 @@ for o, a in opts:
         n_phases = int(a)
     elif o == "-t":
         t_per_phase = int(a)
+    elif o == "-s":
+        solvate = False
+    elif o == "-e":
+        equilibriate = False
 
 # Load PDB and create system
 pdb = PDBFile(f"{inputname}.pdb")
@@ -54,18 +58,20 @@ if dirname != "":
     os.chdir(dirname)
 
 mdsystem = SolvatedMDSystem(pdb.topology, pdb.positions, forcefield)
-a = b = c = 90.013
-#mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, ionicStrength=0.1*molar)
-mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, positiveIon="Na+", negativeIon="Cl-")
-mdsystem.save("prepped.pdb")
+
+if solvate:
+    a = b = c = 90.013
+    #mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, ionicStrength=0.1*molar)
+    mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, positiveIon="Na+", negativeIon="Cl-")
+    mdsystem.save("prepped.pdb")
 
 if dryrun:
     sys.exit(1)
 
-# Equilibrate
-mdsystem.buildSimulation(posre=True)
-mdsystem.equilibrate(t_eq*nanoseconds, posre=True)
-mdsystem.save("equilibrated.pdb")
+if equilibriate:
+    mdsystem.buildSimulation(posre=True)
+    mdsystem.equilibrate(t_eq*nanoseconds, posre=True)
+    mdsystem.save("equilibrated.pdb")
 
 # Production run
 mdsystem.buildSimulation(filePrefix=f"{outputname}",
@@ -77,7 +83,7 @@ for i in tqdm.tqdm(range(n_phases)):
     mdsystem.simulate(t_per_phase*nanoseconds)
     mdsystem.saveCheckpoint(f"checkpoint_{i+1}")
     if verbose:
-        tqdm.write(f"Phase {i} completed, simulated for {i * t_per_phase} ns in total!")
+        tqdm.tqdm.write(f"Phase {i} completed, simulated for {i * t_per_phase} ns in total!")
 
 
 
