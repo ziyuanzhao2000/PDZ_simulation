@@ -20,6 +20,7 @@ dryrun = False
 inputname = "pdz3_rat_apo_refined43_final.pdb"
 outputname = "squeezed.pdb"
 initial_water_perturb = 0
+t_eq = 10
 
 for o, a in opts:
     if o == "-d":
@@ -71,8 +72,12 @@ if verbose:
 mdsystem.squeeze(tolerance=tol, maxIterations=maxit, maxSimtime=5*nanoseconds, initial_water_perturb=initial_water_perturb)
 mdsystem.save(outputname)
 if verbose:
-    print('Squeeze job completed. MDSystem saved to squeezed.pdb file.')
+    print(f'Squeeze job completed. MDSystem saved to {outputname}.pdb file.')
 
+mdsystem.equilibrate(t_eq*nanoseconds, posre=True)
+mdsystem.save("equilibrated.pdb")
+if verbose:
+    print('System equilibrated. MDSystem saved to equilibrated.pdb file.')
 
 
 
