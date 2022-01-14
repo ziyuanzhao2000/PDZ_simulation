@@ -41,6 +41,13 @@ for o, a in opts:
     elif o == "-v":
         verbose = True
 
+if dir_name != "":
+    try:
+        os.mkdir(dir_name)
+    except:
+        pass # ignore err due to existing dir
+    os.chdir(dir_name)
+
 time_series_index = list(np.arange(0,n_frames,d_frame)*t_per_frame)
 for i, symop in enumerate(gemmi.find_spacegroup_by_number(sg).operations()):
     var_diff_in_mag = []
