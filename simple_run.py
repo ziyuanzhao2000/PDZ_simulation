@@ -10,7 +10,7 @@ import tqdm
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "Dvsed:i:o:n:t:")
+    opts, args = getopt.getopt(sys.argv[1:], "Dvsed:i:o:n:t:w:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -26,6 +26,7 @@ outputname = "production"
 n_phases = 1000
 t_per_phase = 10
 t_eq = 10
+box_width = 65 # angstrom
 
 for o, a in opts:
     if o == "-d":
@@ -46,6 +47,8 @@ for o, a in opts:
         solvate = False
     elif o == "-e":
         equilibriate = False
+    elif o == "-w":
+        box_width = float(a)
 
 # Load PDB and create system
 pdb = PDBFile(f"{inputname}.pdb")
@@ -60,9 +63,7 @@ if dirname != "":
 mdsystem = SolvatedMDSystem(pdb.topology, pdb.positions, forcefield)
 
 if solvate:
-    a = b = c = 90.013
-    #mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, ionicStrength=0.1*molar)
-    mdsystem.addSolvent(boxSize=(a, b, c)*angstroms, positiveIon="Na+", negativeIon="Cl-")
+    mdsystem.addSolvent(boxSize=(box_width, box_width, box_width)*angstroms, positiveIon="Na+", negativeIon="Cl-")
     mdsystem.save("prepped.pdb")
 
 if dryrun:
