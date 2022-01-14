@@ -64,8 +64,8 @@ for i, symop in enumerate(gemmi.find_spacegroup_by_number(sg).operations()):
         var_diff_in_mag.append(np.var(np.abs(symop_dataset['FMODEL1'] - symop_dataset['FMODEL2'])))
         var_mag_of_cdiff.append(np.var(np.abs(to_sf(symop_dataset['FMODEL1'], symop_dataset['PHIFMODEL1']) -\
                                          to_sf(symop_dataset['FMODEL2'], symop_dataset['PHIFMODEL2']))))
-    df1 = pd.DataFrame(var_diff_in_mag, columns=[symop.triplet], index=time_series_index)
-    df2 = pd.DataFrame(var_mag_of_cdiff, columns=[symop.triplet], index=time_series_index)
+    df1 = pd.DataFrame(var_diff_in_mag, columns=[symop.triplet()], index=time_series_index)
+    df2 = pd.DataFrame(var_mag_of_cdiff, columns=[symop.triplet()], index=time_series_index)
     if i == 0: # initialize
         df_var_diff_in_mag = df1
         df_var_mag_of_cdiff = df2
