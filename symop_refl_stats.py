@@ -56,9 +56,9 @@ for i, symop in enumerate(gemmi.find_spacegroup_by_number(sg).operations()):
         print(f"Starting to processing symop no.{i+1}")
     for frame in range(0, n_frames, d_frame):
         try:
-            dataset = rs.read_mtz(f"{input_name}_{i}.mtz")
+            dataset = rs.read_mtz(f"{input_name}_{frame}.mtz")
         except:
-            print(f"Can't load {input_name}_{i}.mtz!")
+            print(f"Can't load {input_name}_{frame}.mtz!")
             sys.exit(1)
         symop_dataset = compare_symops(dataset, i + 1, sg)
         var_diff_in_mag.append(np.var(np.abs(symop_dataset['FMODEL1'] - symop_dataset['FMODEL2'])))
