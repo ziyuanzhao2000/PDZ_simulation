@@ -7,7 +7,7 @@ import sys, getopt
 
 # parse cmdline args in a C-like manner
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "Dvd:t:N:i:o:w:")
+    opts, args = getopt.getopt(sys.argv[1:], "Dvd:t:N:i:o:w:n:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
@@ -21,6 +21,7 @@ inputname = "pdz3_rat_apo_refined43_final.pdb"
 outputname = "squeezed.pdb"
 initial_water_perturb = 0
 t_eq = 10
+dn = 1000
 
 for o, a in opts:
     if o == "-d":
@@ -39,6 +40,8 @@ for o, a in opts:
         outputname = a
     elif o == "-w":
         initial_water_perturb = int(a)
+    elif o == "-n":
+        dn = int(a)
 
 forcefield = ForceField('amber14/protein.ff14SB.xml', 
                         'amber14/tip3p.xml')
@@ -69,7 +72,8 @@ if verbose:
     print('System calmed down. Squeeze job about to begin.')
 
 # Squeeze -- 0.05% tolerance of target box volume. 
-mdsystem.squeeze(tolerance=tol, maxIterations=maxit, maxSimtime=5*nanoseconds, initial_water_perturb=initial_water_perturb)
+mdsystem.squeeze(tolerance=tol, maxIterations=maxit, maxSimtime=5*nanoseconds,
+                 initial_water_perturb=initial_water_perturb, dn = dn)
 mdsystem.save(outputname)
 if verbose:
     print(f'Squeeze job completed. MDSystem saved to {outputname}.pdb file.')
