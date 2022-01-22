@@ -7,14 +7,17 @@ import os, sys, getopt
 import matplotlib.pyplot as plt
 
 # parse cmdline args in a C-like manner
+from utils import get_closest_factors
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "vd:i:o:n:")
+    opts, args = getopt.getopt(sys.argv[1:], "vd:i:o:n:t:")
 except getopt.GetoptError as err:
     print(err)
     sys.exit(1)
 
 verbose = False
 dir_name = ""
+trajs_dir_name = "ttrajs"
 output_name = "sample_tic"
 dim = 0
 
@@ -27,6 +30,8 @@ for o, a in opts:
         output_name = a
     elif o == "-n":
         dim = int(a)
+    elif o == "-t":
+        trajs_dir_name = a
 
 if dir_name != "":
     try:
@@ -35,13 +40,18 @@ if dir_name != "":
         pass # ignore err due to existing dir
     os.chdir(dir_name)
 
-meta, ttrajs = load_trajs('ttrajs')
+meta, ttrajs = load_trajs(trajs_dir_name)
 n_trajs = len(ttrajs.keys())
-
-fig1 = plt.figure(figsize=(8 * 4, 6 * n_trajs))
+nx, ny = get_closest_factors(n_trajs)
+fig1, axes = plt.subplots(nx, ny, figsize=(5 * nx, 3 * ny), sharex=True, sharey=True, squeeze=True)
 for i, k in enumerate(ttrajs.keys()):
     traj = ttrajs[k]
-    ax = fig1.add_subplot(n_trajs // 4, 4, i+1)
-    ax.plot(traj[:,dim])
-    ax.set_ylim([-3,3]) # should extract this from data
+    axes[i//ny][i % ny].plot(traj[:,dim])
+    axes[i//ny][i % ny].set_ylim([-5,5]) # should extract this from data
+fig1.add_subplot(111, frameon=False)
+plt.tick_params(labelcolor='none', top=False, bottom=False, left=False, right=False)
+plt.grid(False)
+plt.xlabel("Time (ns)", fontsize=16)
+plt.ylabel(f"tIC {dim}", fontsize=16)
+plt.title(f"Projection of trajectories onto tIC {dim}", fontsize=16)
 fig1.savefig(f"{output_name}_dim_{dim}.pdf")

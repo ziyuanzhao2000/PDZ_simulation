@@ -2,12 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import sys, os, getopt
-
-def get_closest_factors(input: int) -> (int, int):
-    test_num = int(np.sqrt(input))
-    while input % test_num != 0:
-        test_num -= 1
-    return (test_num, input // test_num)
+from utils import get_closest_factors
 
 # parse cmdline args in a C-like manner
 try:
